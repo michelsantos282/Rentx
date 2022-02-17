@@ -1,6 +1,7 @@
 import { hash } from "bcrypt";
 import { inject, injectable } from "tsyringe";
 
+import { AppError } from "../../../../errors/AppError";
 import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 
@@ -22,7 +23,7 @@ class CreateUserUseCase {
       await this.usersRepository.findByDriverLicense(driver_license);
 
     if (emailAlreadyExists || driverLicenseAlreadyExists) {
-      throw new Error("User Already Exists");
+      throw new AppError("User Already Exists");
     }
 
     const hashedPassword = await hash(password, 8);
